@@ -16,7 +16,10 @@ struct GenerationOptions {
     float repetition_penalty = 1.1f;  // Base penalty for repeating tokens
     float frequency_penalty = 0.5f;   // Additional penalty proportional to frequency
     float presence_penalty = 0.8f;    // Additional penalty if token is present at least once
+    int max_tokens = -1;              // If less than 0, then token generation will occur before receiving the eos token.
     unsigned int seed = 0;            // Seed for reproducible random sampling; 0 -> random
+    bool softmax = true;              // If !softmax, then the most probable token is taken without applying penalties
+    float top_fraction = 0.3f;        // What percentage of sorted raw tokens will be sampled?
 };
 
 class CInferenceONNX {
@@ -44,6 +47,7 @@ class CInferenceONNX {
     CInferenceONNX(const std::string& model_path);
 
 
+    std::string GetResponse_(const std::string& Request, GenerationOptions options);
     std::string GetResponse(const std::string& Request, GenerationOptions options);
 
     ~CInferenceONNX();
